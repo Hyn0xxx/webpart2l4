@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $pdo->commit();
             $success = true;
             
-            // Сохраняем данные в Cookies на год для автозаполнения при следующих визитах
+            // Сохраняем ВСЕ данные формы в Cookies на год для автозаполнения при следующих визитах
             saveFormDataToCookie($formData);
             
             // Очищаем временные данные
@@ -292,9 +292,10 @@ if (isset($_COOKIE['temp_form_data'])) {
 $savedFormData = getSavedFormDataFromCookie();
 
 // Формируем данные для отображения: сначала временные, потом сохраненные
+// ИСПРАВЛЕНО: убрано условие !$success, чтобы данные показывались даже после успешной отправки
 if (!empty($tempFormData)) {
     $displayFormData = $tempFormData;
-} elseif (!empty($savedFormData) && !$success && $_SERVER['REQUEST_METHOD'] != 'POST') {
+} elseif (!empty($savedFormData) && $_SERVER['REQUEST_METHOD'] != 'POST') {
     $displayFormData = $savedFormData;
 } else {
     $displayFormData = [];
